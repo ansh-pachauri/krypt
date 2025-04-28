@@ -1,6 +1,7 @@
 import {ethers} from "ethers";
 import {contractAddress, contractAbi} from "../utils/constants";
 import React, {createContext, useContext, useEffect, useState} from "react";
+
 export const TransctionContext =createContext();
 
 const {ethereum} = window;
@@ -27,19 +28,39 @@ export const TransctionProvider = ({children})=>{
 
     const [isLoading, setIsLoading] = useState(false);
     const [transcationCount, setTranscationCount] = useState(localStorage.getItem("transcationCount"));
-
-    // const handleChange = (e, name) => {
-    //     setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
-    // };
+    const [transcations, setTranscations] = useState([]);
 
     const handleChange = (e, name) => {
-        console.log("Input changing:", name, e.target.value.trim());
-        setFormData((prevState) => {
-            const newState = { ...prevState, [name]: e.target.value };
-            console.log("New form state:", newState);
-            return newState;
-        });
+        setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
     };
+
+    const getAllTranscations =async()=>{
+        try {
+            if(!ethereum) return alert("Please install MetaMask");
+
+            const transactionContract = await getEtherumContract();
+            const availableTranscations = await transactionContract.getAllTransctions();
+            console.log(availableTranscations);
+
+            const structuredTranscations = availableTranscations.map((transcations)=>{
+                addressTo: transcations.receiver;
+                addressFrom: transcations.sender;
+                timeStamp: new Date(transcations.timestamp.toNumber()*1000).toLocaleString();
+                message: transcations.message;
+                keyword: transcations.keyword;
+                amount: parseInt(transcations.amount.toBeHex) / (10**18);
+
+            });
+
+            console.log(structuredTranscations);
+            setTranscations(structuredTranscations);
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+
+   
 
 
     const checkIfWalletIsConnected = async () => {
@@ -51,7 +72,8 @@ export const TransctionProvider = ({children})=>{
         if(accounts.length){
             setCurrentAccount(accounts[0]);
 
-            //later we will call the function to get the all tnx
+            //we will call the function to get the all tnx
+            getAllTranscations();
         }else{
             console.log("No accounts found");
         }
@@ -66,6 +88,18 @@ export const TransctionProvider = ({children})=>{
             
         }
          
+    }
+
+    const checkIfTranscationExists = async() =>{
+        try{
+            const transactionContract = await getEtherumContract();
+            const trasncationCount = await transactionContract.getTransctionCount();
+            window.localStorage.setItem("transcationCount", trasncationCount);
+        }catch(error){
+            console.log(error);
+            throw new Error("No ethereum object");
+
+        }
     }
 
     const connectWallet = async ()=>{
@@ -109,7 +143,7 @@ export const TransctionProvider = ({children})=>{
                 keyword); 
             setIsLoading(true);
             console.log(`Loading - ${tx.hash}`);
-            await transctionHash.wait();
+            await tx.wait();
             setIsLoading(false);
             console.log(`Success - ${tx.hash}`);
 
@@ -127,7 +161,8 @@ export const TransctionProvider = ({children})=>{
 
     useEffect(() => {
         checkIfWalletIsConnected();
-    },[]);
+        checkIfTranscationExists();
+        },[]);
 
     return(
         <TransctionContext.Provider value={{connectWallet, currentAccount, formData, setFormData, handleChange, sendTransction}}>
