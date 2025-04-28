@@ -4,10 +4,10 @@ import React, {createContext, useContext, useEffect, useState} from "react";
 export const TransctionContext =createContext();
 
 const {ethereum} = window;
-const getEtherumContract= ()=>{
+const getEtherumContract= async()=>{
     if (!window.ethereum) throw new Error("No ethereum object");
     const provider = new ethers.BrowserProvider(window.ethereum);
-    const signer = provider.getSigner();
+    const signer =await provider.getSigner();
     const transctionContract = new ethers.Contract(
         contractAddress, contractAbi, signer
     )
@@ -18,19 +18,22 @@ const getEtherumContract= ()=>{
         transctionContract});
 
     return transctionContract;
-}
+}   
 
 export const TransctionProvider = ({children})=>{
 
     const [currentAccount, setCurrentAccount] = useState("");
     const [formData, setFormData] = useState({addressTo:"", amount: "", keyword: "", message: ""});
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [transcationCount, setTranscationCount] = useState(localStorage.getItem("transcationCount"));
+
     // const handleChange = (e, name) => {
     //     setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
     // };
 
     const handleChange = (e, name) => {
-        console.log("Input changing:", name, e.target.value);
+        console.log("Input changing:", name, e.target.value.trim());
         setFormData((prevState) => {
             const newState = { ...prevState, [name]: e.target.value };
             console.log("New form state:", newState);
@@ -86,7 +89,32 @@ export const TransctionProvider = ({children})=>{
             //get the data from the form and send it to the contract
             const{addressTo, amount, keyword, message} = formData;
             console.log("log2");
-            getEtherumContract();
+            const transactionContract = await getEtherumContract(); 
+            const parsedAmount = ethers.parseEther(amount);
+
+            await ethereum.request({
+                method: 'eth_sendTransaction',
+                params:[{
+                    from: currentAccount,
+                    to: addressTo,
+                    gas: '0x5208', //21000 GWEI
+                    value: ethers.toBeHex(parsedAmount) //0.0001
+                }]
+            })
+
+            const tx =  await transactionContract.addToBlockchain(
+                addressTo,
+                parsedAmount,
+                message, 
+                keyword); 
+            setIsLoading(true);
+            console.log(`Loading - ${tx.hash}`);
+            await transctionHash.wait();
+            setIsLoading(false);
+            console.log(`Success - ${tx.hash}`);
+
+            const transctionCount = await transactionContract.getTransctionCount();
+            setTranscationCount(transctionCount());
             console.log("log3"); 
 
             

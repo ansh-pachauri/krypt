@@ -34,13 +34,10 @@ contract Transctions {
     }
 
     function getAllTransctions()public view returns(TransferStruct[] memory){
-
+        return transactions;
     }
 
     function getTransctionCount()public view returns (uint256){
-
+        return transcationCount;
     }
-
-
-
 }

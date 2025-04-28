@@ -106,6 +106,7 @@ export default function Welcome(){
 
                 {/* Form */}
                 <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
+                
                     <Input placeholder="Address To" name="addressTo" type="text" value={formData.addressTo} handleChange={handleChange} />
                     <Input placeholder="Amount (ETH)" name="amount" type="text" value={formData.amount} handleChange={handleChange} />
                     <Input placeholder="Keyword (Gif)" name="keyword" type="text" value={formData.keyword} handleChange={handleChange} />
