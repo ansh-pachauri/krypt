@@ -45,8 +45,8 @@ export const TranscationProvider = ({children})=>{
             const structuredtransction = availabletransction.map((transction) => ({
                  
                     addressTo: transction.receiver,
-                    addressFrom: transction.sender,
-                    timeStamp: new Date(transction.timestamp.toNumber() * 1000).toLocaleString(),
+                    addressFrom: transction.from,
+                    timestamp: new Date(Number(transction.timestamp) * 1000).toLocaleString(),
                     message: transction.message,
                     keyword: transction.keyword,
                     amount: ethers.formatEther(transction.amount)
@@ -95,12 +95,16 @@ export const TranscationProvider = ({children})=>{
         try{
             if(!ethereum) return alert("Please install MetaMask");
             const transactionContract = await getEtherumContract();
+            console.log("transactionContract", transactionContract);
+            console.log("working");
             const transcationCount = await transactionContract.getTransctionCount();
-            console.log(transcationCount);
-            const countValue = typeof transcationCount === 'bigint' 
-            ? transcationCount.toString()
-            : transcationCount.toString();
-            window.localStorage.setItem("transcationCount", countValue);
+            console.log("transcationCount" ,transcationCount);
+            const countFromVar = await transactionContract.transcationCount();
+console.log("countFromFunc", transcationCount, "countFromVar", countFromVar);
+            // const countValue = typeof transcationCount === 'bigint' 
+            // ? transcationCount.toString()
+            // : transcationCount.toString();
+            window.localStorage.setItem("transcationCount", countFromVar);
 
         }catch(error){
             console.log(error);

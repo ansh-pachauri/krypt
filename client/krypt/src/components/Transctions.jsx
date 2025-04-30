@@ -64,12 +64,12 @@ export default function Transactions(){
 
             <div className="flex flex-wrap justify-center items-center mt-10">
             {transction && transction.length > 0 ? (
-              transction.reverse().map((transaction, i) => (
-                            <TransactionsCard key={i} {...transaction} />
-                        ))
-                    ) : (
-                        <p className="text-white text-center">No transactions found</p>
-                    )}
+              [...transction].reverse().map((transaction, i) => (
+                <TransactionsCard key={i} {...transaction} />
+              ))
+            ) : (
+              <p className="text-white text-center">No transactions found</p>
+            )}
 
 
             </div>
