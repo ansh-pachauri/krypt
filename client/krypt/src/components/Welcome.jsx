@@ -2,13 +2,13 @@ import {AiFillPlayCircle} from "react-icons/ai";
 import {SiEthereum} from "react-icons/si";
 import {BsInfoCircle} from "react-icons/bs";
 import Loader from "./Loader";
-import { TransctionContext } from "../context/TransctionContext";
+import { TranscationContext } from "../context/TransctionContext";
 import { useContext } from "react";
 
 export default function Welcome(){
 
-    const {connectWallet, currentAccount, formData, setFormData, handleChange, sendTransction
-    } = useContext(TransctionContext);
+    const {connectWallet, currentAccount, formData, setFormData, handleChange, sendTransction, isLoading
+    } = useContext(TranscationContext);
 
     const Input = ({placeholder, name, type, value, handleChange})=>{
         return (
@@ -113,7 +113,7 @@ export default function Welcome(){
                     <Input placeholder="Enter Message" name="message" type="text" value={formData.message} handleChange={handleChange} />
                     <div className="h-[1px] w-full bg-gray-400 my-2" />
                     
-                    {false ? (
+                    {isLoading ? (
                         <Loader />
                     ) : (
                         <button

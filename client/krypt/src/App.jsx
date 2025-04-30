@@ -1,6 +1,6 @@
 
 import './App.css'
-import {Welcome, Services, Navbar, Loader, Footer, Transctions} from './components'
+import {Welcome, Services, Navbar, Loader, Transctions} from './components'
 
 function App() {
   
@@ -14,7 +14,8 @@ function App() {
       </div>
       <Services/>
       <Transctions/>
-      <Footer/>
+      
+      
     </div>
     </>
         

@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useContext , useEffect} from "react";
 
-import { TransctionContext } from "../context/TransctionContext";
+import { TranscationContext } from "../context/TransctionContext";
 import dummyData from "../utils/dummyData";
 import { shortenAddress } from "../utils/shortenAddress";
 import useFetch  from "../hooks/useFetch";
@@ -49,7 +49,10 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
 
 
 export default function Transactions(){
-    const {currentAccount} = useContext(TransctionContext);
+    const {currentAccount, transction,isLoading} = useContext(TranscationContext);
+    useEffect(() => {
+      console.log("Current transactions in component:", transction);
+  }, [transction]);
     return(
         <div>
             <div>
@@ -60,9 +63,14 @@ export default function Transactions(){
             )} 
 
             <div className="flex flex-wrap justify-center items-center mt-10">
-            {dummyData.reverse().map((transaction, i) => (
-            <TransactionsCard key={i} {...transaction} />
-          ))}
+            {transction && transction.length > 0 ? (
+              transction.reverse().map((transaction, i) => (
+                            <TransactionsCard key={i} {...transaction} />
+                        ))
+                    ) : (
+                        <p className="text-white text-center">No transactions found</p>
+                    )}
+
 
             </div>
             </div>
