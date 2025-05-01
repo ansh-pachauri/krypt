@@ -1,21 +1,20 @@
 
 import './App.css'
-import {Welcome, Services, Navbar, Loader, Transctions} from './components'
+import {Welcome, Services, Navbar, Transctions} from './components'
 
 function App() {
   
 
   return (
     <>
-    <div className="min-h-screen bg-black text-white">
+    <div className="h-screen">
       <div className="gradient-bg-welcome">
         <Navbar/>
         <Welcome/>
       </div>
       <Services/>
       <Transctions/>
-      
-      
+
     </div>
     </>
         
