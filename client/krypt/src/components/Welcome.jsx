@@ -5,25 +5,27 @@ import Loader from "./Loader";
 import { TranscationContext } from "../context/TransctionContext";
 import { useContext } from "react";
 
+const Input = ({placeholder, name, type, value, handleChange})=>{
+    return (
+
+        <input
+            placeholder={placeholder}
+            name={name}
+            type={type}
+            step="0.0001"
+            value={value}
+            onChange={(e) => handleChange(e, name)}
+            className="my-2 w-full rounded-3xl p-4 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+        />
+    )
+}
+
 export default function Welcome(){
 
     const {connectWallet, currentAccount, formData, setFormData, handleChange, sendTransction, isLoading
     } = useContext(TranscationContext);
 
-    const Input = ({placeholder, name, type, value, handleChange})=>{
-        return (
-
-            <input
-                placeholder={placeholder}
-                name={name}
-                type={type}
-                step="0.0001"
-                value={value}
-                onChange={(e) => handleChange(e, name)}
-                className="my-2 w-full rounded-3xl p-4 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
-            />
-        )
-    }
+   
 
     
 // handleSubmit function

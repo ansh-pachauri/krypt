@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
-const API_KEY = import.meta.env.VITE_GIPHY_API_KEY;
+const API_KEY = import.meta.env.VITE_GIPHY_API_KEY; 
 
 export default function useFetch({keyword}){
     const [gifUrl, setGifUrl] = useState("");
 
     const fetchGifs = async()=>{
         try{
-            const response = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=funny&limit=1`);
+            const response = await axios.get(
+                `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${keyword.split(" ").join("")}&limit=1`
+              );
 
-            const {data} = await response.json();
+            const {data} = response.data;
             setGifUrl(data[0]?.images?.downsized_medium?.url);
         }catch(error){
             console.log(error);
