@@ -22,7 +22,7 @@ const Input = ({placeholder, name, type, value, handleChange})=>{
 
 export default function Welcome(){
 
-    const {connectWallet, currentAccount, formData, setFormData, handleChange, sendTransction, isLoading
+    const {connectWallet, currentAccount, formData, handleChange, sendTransction, isLoading
     } = useContext(TranscationContext);
 
    

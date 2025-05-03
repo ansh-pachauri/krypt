@@ -49,7 +49,7 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
 
 
 export default function Transactions(){
-    const {currentAccount, transction,isLoading} = useContext(TranscationContext);
+    const {currentAccount, transction} = useContext(TranscationContext);
     useEffect(() => {
       console.log("Current transactions in component:", transction);
   }, [transction]);
@@ -62,7 +62,9 @@ export default function Transactions(){
                 <h3 className="text-white text-3xl text-center my-2">Connect Wallet to see the latest transactions</h3>
             )} 
 
-            <div className="flex flex-wrap justify-center items-center mt-10">
+            {currentAccount ? (
+              <div className="flex flex-wrap justify-center items-center mt-10">
+           
             {transction && transction.length > 0 ? (
               [...transction].reverse().map((transaction, i) => (
                 <TransactionsCard key={i} {...transaction} />
@@ -73,6 +75,14 @@ export default function Transactions(){
 
 
             </div>
+            )  : (
+              <div className="flex flex-wrap justify-center items-center mt-10">
+                {dummyData.map((transaction, i) => (
+                  <TransactionsCard key={i} {...transaction} />
+                ))}
+              </div>
+            )}
+            
             </div>
         </div>
     )

@@ -1,6 +1,6 @@
 import {ethers} from "ethers";
 import {contractAddress, contractAbi} from "../utils/constants";
-import React, {createContext, useContext, useEffect, useState} from "react";
+import React, {createContext, useEffect, useState} from "react";
 
 export const TranscationContext =createContext();
 
@@ -100,11 +100,9 @@ export const TranscationProvider = ({children})=>{
             const transcationCount = await transactionContract.getTransctionCount();
             console.log("transcationCount" ,transcationCount);
             const countFromVar = await transactionContract.transcationCount();
-console.log("countFromFunc", transcationCount, "countFromVar", countFromVar);
-            // const countValue = typeof transcationCount === 'bigint' 
-            // ? transcationCount.toString()
-            // : transcationCount.toString();
-            window.localStorage.setItem("transcationCount", countFromVar);
+            console.log("countFromFunc", transcationCount, "countFromVar", countFromVar);
+            
+            window.localStorage.setItem("transcationCount", transcationCount);
 
         }catch(error){
             console.log(error);
@@ -162,7 +160,7 @@ console.log("countFromFunc", transcationCount, "countFromVar", countFromVar);
             const transcationCount = await transactionContract.getTransctionCount();
             setTranscationCount(transcationCount.toString());
             await getAlltransction();
-            // window.location.reload();
+            window.location.reload();
             console.log("log3"); 
 
             
@@ -185,7 +183,7 @@ console.log("countFromFunc", transcationCount, "countFromVar", countFromVar);
         }
     },[currentAccount])    
     return(
-        <TranscationContext.Provider value={{connectWallet, currentAccount, formData, setFormData, handleChange, sendTransction, transction,isLoading}}>
+        <TranscationContext.Provider value={{connectWallet, currentAccount, formData, setFormData, handleChange, sendTransction, transction,isLoading, transcationCount}}>
             {children}
         </TranscationContext.Provider>
         
